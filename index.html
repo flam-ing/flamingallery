@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>데패뉴 3D 뉴스룸 — DAILY FASHION NEWS</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23DD382C'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='%23F5F2EB' font-family='sans-serif' font-weight='bold'>N</text></svg>">
+  <title>2D Art Gallery</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23DD382C'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='%23F5F2EB' font-family='sans-serif' font-weight='bold'>G</text></svg>">
   <link rel="stylesheet" href="./shared/brand.css">
   <link rel="stylesheet" href="style.css">
   <script type="importmap">{"imports":{"three":"./shared/vendor/three.module.js"}}</script>
@@ -16,9 +16,7 @@
 
   <!-- 상단 HUD -->
   <header class="hud hud-top" aria-hidden="true">
-    <img class="hud-logo" src="./shared/assets/brand/logo-main.png" alt="DAILY FASHION NEWS">
-    <span class="hud-sep"></span>
-    <span class="hud-title">NEWSROOM&nbsp;3D</span>
+    <span class="hud-wordmark">2D ART GALLERY</span>
     <span class="hud-right" id="hudMeta"></span>
   </header>
 
@@ -42,21 +40,21 @@
     <div class="panel-body" id="panelBody"></div>
     <div class="panel-foot">
       <a id="panelLink" href="#" target="_blank" rel="noopener noreferrer">원문 보기 ↗</a>
-      <span class="panel-brand">DAILY FASHION NEWS</span>
+      <span class="panel-brand">2D ART GALLERY</span>
     </div>
   </aside>
 
   <!-- 로딩 오버레이 -->
   <div id="loader">
-    <img src="./shared/assets/brand/logo-main.png" alt="DAILY FASHION NEWS">
+    <div class="loader-word">2D ART GALLERY</div>
     <div class="spin" aria-hidden="true"></div>
-    <p class="loader-kr">오늘의 뉴스를 벽에 거는 중</p>
+    <p class="loader-kr">오늘의 이슈를 벽에 거는 중</p>
     <p class="loader-en">HANGING TODAY'S ISSUE</p>
   </div>
 
   <!-- WebGL / 데이터 폴백 -->
   <div id="fallback" hidden>
-    <img src="./shared/assets/brand/logo-main.png" alt="DAILY FASHION NEWS">
+    <div class="fallback-word">2D ART GALLERY</div>
     <h1 id="fallbackTitle">이 브라우저에선 전시장이 열리지 않아요</h1>
     <p id="fallbackDesc">WebGL을 지원하는 최신 브라우저(Chrome · Safari · Edge)로 다시 들어와 주세요</p>
   </div>

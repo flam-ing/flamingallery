@@ -1,5 +1,5 @@
 /* ─────────────────────────────────────────────
-   데패뉴 3D 뉴스룸 — UI 레이어 스타일
+   2D Art Gallery — UI 레이어 스타일
    3D 캔버스 위에 얹히는 HUD / 패널 / 로더
    ───────────────────────────────────────────── */
 
@@ -40,18 +40,12 @@ html, body {
   padding: 14px 18px;
   padding-top: calc(14px + env(safe-area-inset-top));
 }
-.hud-logo { height: 12px; width: auto; display: block; }
-.hud-sep {
-  width: 1px; height: 14px;
-  background: var(--dfn-ink);
-  opacity: .35;
-}
-.hud-title {
+.hud-wordmark {
   font-family: var(--dfn-font-en);
-  font-weight: 600;
-  font-size: 11px;
-  letter-spacing: .32em;
-  color: var(--dfn-red);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: .28em;
+  color: var(--dfn-ink);
   white-space: nowrap;
 }
 .hud-right {
@@ -301,15 +295,21 @@ body.panel-open .dfn-vr, body.panel-open #vrCaption { visibility: hidden; }
   transition: opacity 2s ease;
 }
 #loader.done { opacity: 0; pointer-events: none; }
-#loader img { width: min(280px, 62vw); height: auto; }
+.loader-word {
+  font-family: var(--dfn-font-en);
+  font-weight: 700;
+  font-size: clamp(20px, 5vw, 30px);
+  letter-spacing: .14em;
+  color: var(--dfn-ink);
+}
 #loader .spin {
   width: 34px; height: 34px;
   border-radius: 50%;
   border: 3px solid var(--dfn-line);
   border-top-color: var(--dfn-red);
-  animation: dfnspin .9s linear infinite;
+  animation: gallery-spin .9s linear infinite;
 }
-@keyframes dfnspin { to { transform: rotate(360deg); } }
+@keyframes gallery-spin { to { transform: rotate(360deg); } }
 .loader-kr {
   margin: 0;
   font-size: 14px;
@@ -339,7 +339,14 @@ body.panel-open .dfn-vr, body.panel-open #vrCaption { visibility: hidden; }
   text-align: center;
   padding: 24px;
 }
-#fallback img { width: min(280px, 62vw); height: auto; margin-bottom: 10px; }
+.fallback-word {
+  font-family: var(--dfn-font-en);
+  font-weight: 700;
+  font-size: clamp(18px, 4.5vw, 26px);
+  letter-spacing: .14em;
+  color: var(--dfn-ink);
+  margin-bottom: 10px;
+}
 #fallback h1 {
   margin: 0;
   font-size: clamp(18px, 4.5vw, 26px);

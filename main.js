@@ -1,6 +1,6 @@
 /* ═══════════════════════════════════════════════════════════════
-   데패뉴 3D 뉴스룸 — WebXR 가상 전시장
-   news.json 24건이 매일 벽에 걸리는 크림 화이트 갤러리
+   2D Art Gallery — WebXR 가상 전시장
+   news.json 항목이 매일 벽에 걸리는 크림 화이트 갤러리
    three.js r160 (로컬 벤더드) · 프레임워크 없음
    ═══════════════════════════════════════════════════════════════ */
 
@@ -94,10 +94,9 @@ async function init() {
   rig.add(camera);
   scene.add(rig);
 
-  // ── 에셋 로드 (폰트 + 데이터 + 로고)
-  const [data, logoImg] = await Promise.all([
+  // ── 에셋 로드 (폰트 + 데이터)
+  const [data] = await Promise.all([
     loadNews(),
-    loadImage('./shared/assets/brand/logo-main.png'),
     loadFonts(),
     delay(700), // 스피너 최소 노출
   ]);
@@ -107,7 +106,7 @@ async function init() {
   // ── 공간 구축
   buildLights();
   buildRoom();
-  buildTitleWall(logoImg);
+  buildTitleWall();
   buildRedWallSign();
   buildFrames();
   buildSculpture();
@@ -148,14 +147,6 @@ async function loadNews() {
   return res.json();
 }
 
-function loadImage(src) {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => resolve(img);
-    img.onerror = () => reject(new Error('image load fail: ' + src));
-    img.src = src;
-  });
-}
 
 // 캔버스에 한글을 그리기 전에 Pretendard/Poppins 로드를 반드시 기다린다
 function loadFonts() {
@@ -261,14 +252,17 @@ function buildRoom() {
 
 /* ── 타이틀 월 (북쪽 정면) ─────────────────────────────────── */
 
-function buildTitleWall(logoImg) {
+function buildTitleWall() {
   const c = document.createElement('canvas');
   c.width = 1024; c.height = 400;
   const x = c.getContext('2d');
+  x.textAlign = 'center';
 
-  // 로고 워드마크 (검정 PNG, 투명 배경)
-  const lw = 880, lh = lw * (logoImg.height / logoImg.width);
-  x.drawImage(logoImg, (1024 - lw) / 2, 78, lw, lh);
+  // 텍스트 워드마크
+  x.fillStyle = '#101010';
+  try { x.letterSpacing = '14px'; } catch {}
+  x.font = `800 92px ${FONT_EN}`;
+  x.fillText('2D ART GALLERY', 512, 190);
 
   // 레드 룰
   x.fillStyle = '#DD382C';
@@ -276,7 +270,6 @@ function buildTitleWall(logoImg) {
 
   // 날짜 라인 (Poppins 캡스)
   x.fillStyle = '#101010';
-  x.textAlign = 'center';
   try { x.letterSpacing = '10px'; } catch {}
   x.font = `600 33px ${FONT_EN}`;
   x.fillText(formatDateEN(fetchedAt), 512, 296);
@@ -285,7 +278,7 @@ function buildTitleWall(logoImg) {
   try { x.letterSpacing = '1px'; } catch {}
   x.fillStyle = '#6E6A61';
   x.font = `500 25px ${FONT_KR}`;
-  x.fillText('오늘 발행된 뉴스가 그대로 오늘의 전시', 512, 348);
+  x.fillText('오늘 발행된 이슈가 그대로 오늘의 전시', 512, 348);
 
   const plane = new THREE.Mesh(
     new THREE.PlaneGeometry(11.5, 11.5 * (400 / 1024)),
@@ -399,8 +392,8 @@ function drawCardCanvas(item, idx) {
   x.textAlign = 'left';
   try { x.letterSpacing = '0px'; } catch {}
 
-  // 채널 배지 — 데패뉴(잉크) / 데뷰웰(옐로)
-  const ch = item.channel || '데패뉴';
+  // 채널 배지 — 데이터의 channel 값을 그대로 표시(잉크/옐로 2색), 값이 없으면 ARCHIVE
+  const ch = item.channel || 'ARCHIVE';
   x.font = `700 24px ${FONT_KR}`;
   const bw = x.measureText(ch).width + 40;
   const isMain = ch === '데패뉴';
@@ -448,7 +441,7 @@ function drawCardCanvas(item, idx) {
   try { x.letterSpacing = '3px'; } catch {}
   x.font = `500 17px ${FONT_EN}`;
   x.fillStyle = COLOR.muted;
-  x.fillText('DAILY FASHION NEWS', M + 20, 743);
+  x.fillText('2D ART GALLERY', M + 20, 743);
   try { x.letterSpacing = '0px'; } catch {}
 
   if (item.verified) {
@@ -786,7 +779,7 @@ function openPanel(f) {
     meta.appendChild(s);
   };
   chip(item.date || '');
-  chip(item.channel || '데패뉴', item.channel === '데뷰웰' ? 'yellow' : 'ink');
+  chip(item.channel || 'ARCHIVE', item.channel === '데뷰웰' ? 'yellow' : 'ink');
   if (item.verified) chip('FACT-CHECKED ✓', 'red');
   else chip('확인 중', 'yellow');
 
