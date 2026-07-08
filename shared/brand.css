@@ -13,14 +13,14 @@
 }
 
 :root {
-  --dfn-bg: #F5F2EB;      /* 크림 */
-  --dfn-ink: #101010;     /* 잉크 블랙 */
-  --dfn-red: #DD382C;     /* 시그니처 레드 */
-  --dfn-yellow: #FFE14D;  /* 하이라이트 옐로 */
-  --dfn-paper: #FFFFFF;
-  --dfn-muted: #6E6A61;
-  --dfn-line: rgba(16, 16, 16, 0.12);
+  --flm-bg: #F5F2EB;      /* 크림 */
+  --flm-ink: #101010;     /* 잉크 블랙 */
+  --flm-red: #DD382C;     /* 시그니처 레드 */
+  --flm-yellow: #FFE14D;  /* 하이라이트 옐로 */
+  --flm-paper: #FFFFFF;
+  --flm-muted: #6E6A61;
+  --flm-line: rgba(16, 16, 16, 0.12);
 
-  --dfn-font-kr: "Pretendard Variable", "Pretendard", -apple-system, "Apple SD Gothic Neo", sans-serif;
-  --dfn-font-en: "Poppins Variable", "Poppins", "Pretendard Variable", sans-serif;
+  --flm-font-kr: "Pretendard Variable", "Pretendard", -apple-system, "Apple SD Gothic Neo", sans-serif;
+  --flm-font-en: "Poppins Variable", "Poppins", "Pretendard Variable", sans-serif;
 }

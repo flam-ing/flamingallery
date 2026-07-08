@@ -41,6 +41,7 @@ const keys = new Set();
 const stickInput = { x: 0, y: 0 };         // 모바일 조이스틱 (-1..1)
 const twoFingerMove = { fwd: 0, strafe: 0 };
 const velocity = new THREE.Vector3();
+let bobTime = 0;
 
 const state = {
   focused: null,        // 현재 포커스된 액자 데이터
@@ -290,23 +291,11 @@ function buildTitleWall() {
   x.fillStyle = '#101010';
   try { x.letterSpacing = '14px'; } catch {}
   x.font = `800 80px ${FONT_EN}`;
-  x.fillText('FLAMINGALLERY', 512, 190);
+  x.fillText('FLAMINGALLERY', 512, 220);
 
   // 레드 룰
   x.fillStyle = '#DD382C';
-  x.fillRect((1024 - 220) / 2, 226, 220, 9);
-
-  // 날짜 라인 (Poppins 캡스)
-  x.fillStyle = '#101010';
-  try { x.letterSpacing = '10px'; } catch {}
-  x.font = `600 33px ${FONT_EN}`;
-  x.fillText(formatDateEN(fetchedAt), 512, 296);
-
-  // 국문 태그라인
-  try { x.letterSpacing = '1px'; } catch {}
-  x.fillStyle = '#6E6A61';
-  x.font = `500 25px ${FONT_KR}`;
-  x.fillText('오늘 발행된 이슈가 그대로 오늘의 전시', 512, 348);
+  x.fillRect((1024 - 220) / 2, 256, 220, 9);
 
   const plane = new THREE.Mesh(
     new THREE.PlaneGeometry(11.5, 11.5 * (400 / 1024)),
@@ -326,16 +315,8 @@ function buildRedWallSign() {
 
   x.fillStyle = '#F5F2EB';
   try { x.letterSpacing = '14px'; } catch {}
-  x.font = `700 96px ${FONT_EN}`;
-  x.fillText('FRESH DAILY', 512, 168);
-
-  x.fillStyle = '#FFE14D';
-  x.fillRect((1024 - 190) / 2, 208, 190, 9);
-
-  try { x.letterSpacing = '1px'; } catch {}
-  x.fillStyle = '#F5F2EB';
-  x.font = `500 34px ${FONT_KR}`;
-  x.fillText('내일이면 다 바뀌는 벽', 512, 288);
+  x.font = `800 80px ${FONT_EN}`;
+  x.fillText('FLAMINGALLERY', 512, 220);
 
   const plane = new THREE.Mesh(
     new THREE.PlaneGeometry(9, 9 * (400 / 1024)),
@@ -479,9 +460,7 @@ function buildSculpture() {
 /* ── HUD / 패널 / VR ───────────────────────────────────────── */
 
 function setupHUD() {
-  const verified = newsItems.filter(i => i.verified).length;
-  document.getElementById('hudMeta').textContent =
-    `${formatDateShort(fetchedAt)} · ${newsItems.length} ON VIEW · ${verified} FACT-CHECKED`;
+  document.getElementById('hudMeta').textContent = '';
 
   const coarse = window.matchMedia('(pointer: coarse)').matches;
   document.getElementById('hint').innerHTML = coarse
@@ -498,40 +477,7 @@ function setupPanel() {
 }
 
 function setupVR() {
-  const btn = VRButton.createButton(renderer);
-  btn.classList.add('dfn-vr');
-  document.body.appendChild(btn);
-  // 미지원 브라우저 문구를 한국어 톤으로 + 외부 링크로 전시장 이탈 방지
-  // (WebXR 미지원 시 VRButton은 immersiveweb.dev 등으로 가는 <a>를 반환한다)
-  if (btn.tagName === 'A') {
-    btn.removeAttribute('href');
-    btn.addEventListener('click', e => e.preventDefault());
-  }
-  const VR_LABELS = {
-    'VR NOT SUPPORTED': 'VR 미지원 — 그냥 둘러보세요',
-    'WEBXR NOT AVAILABLE': 'WEBXR 미지원 — 그냥 둘러보세요',
-    'WEBXR NEEDS HTTPS': 'HTTPS 필요 — 그냥 둘러보세요',
-    'VR NOT ALLOWED': 'VR 권한 없음 — 그냥 둘러보세요',
-  };
-  const patch = () => {
-    if (btn.tagName === 'A' && btn.hasAttribute('href')) btn.removeAttribute('href');
-    const label = VR_LABELS[btn.textContent.trim()];
-    if (label) btn.textContent = label;
-  };
-  patch();
-  new MutationObserver(patch).observe(btn, { childList: true, characterData: true, subtree: true });
-
-  renderer.xr.addEventListener('sessionstart', () => {
-    state.inVR = true;
-    document.body.classList.add('vr');
-    if (state.focused) exitFocus(true);
-    // VR 기준점: 현재 서 있던 자리
-    velocity.set(0, 0, 0);
-  });
-  renderer.xr.addEventListener('sessionend', () => {
-    state.inVR = false;
-    document.body.classList.remove('vr');
-  });
+  // VR 버튼 제거
 }
 
 /* ── 조작: 시점 회전 + 이동 + 레이캐스트 픽 ────────────────── */
@@ -596,10 +542,10 @@ function setupControls() {
   // 키보드
   const MOVE_KEYS = ['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'];
   window.addEventListener('keydown', e => {
-    if (MOVE_KEYS.includes(e.code) || e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
+    if (MOVE_KEYS.includes(e.code) || e.code === 'ShiftLeft' || e.code === 'ShiftRight' || e.code === 'Space') {
       keys.add(e.code);
       if (MOVE_KEYS.includes(e.code) && state.focused && !state.tween) exitFocus(); // 걷기 시작하면 자연스럽게 복귀
-      if (e.code.startsWith('Arrow')) e.preventDefault();
+      if (e.code.startsWith('Arrow') || e.code === 'Space') e.preventDefault();
     }
   });
   window.addEventListener('keyup', e => keys.delete(e.code));
@@ -793,7 +739,7 @@ function animate() {
     const tfDecay = Math.pow(0.001, dt);
     twoFingerMove.fwd *= tfDecay;
     twoFingerMove.strafe *= tfDecay;
-    const boost = (keys.has('ShiftLeft') || keys.has('ShiftRight')) ? 1.8 : 1;
+    const boost = (keys.has('ShiftLeft') || keys.has('ShiftRight') || keys.has('Space')) ? 2.2 : 1;
 
     if (!state.focused) {
       const speed = 3.1 * boost;
@@ -806,6 +752,15 @@ function animate() {
       if (velocity.lengthSq() > 0.0001) {
         rig.position.addScaledVector(velocity, dt);
         clampToRoom(rig.position);
+
+        // 터벅터벅 걷는 시늉 (Head bobbing)
+        const speedFactor = velocity.length();
+        bobTime += dt * speedFactor * 4.0;
+        camera.position.y = EYE + Math.sin(bobTime) * 0.045;
+        camera.position.x = Math.cos(bobTime * 0.5) * 0.015;
+      } else {
+        camera.position.y = THREE.MathUtils.lerp(camera.position.y, EYE, 1 - Math.pow(0.0001, dt));
+        camera.position.x = THREE.MathUtils.lerp(camera.position.x, 0, 1 - Math.pow(0.0001, dt));
       }
     }
   }

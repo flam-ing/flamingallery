@@ -8,9 +8,9 @@
 html, body {
   height: 100%;
   margin: 0;
-  background: var(--dfn-bg);
-  color: var(--dfn-ink);
-  font-family: var(--dfn-font-kr);
+  background: var(--flm-bg);
+  color: var(--flm-ink);
+  font-family: var(--flm-font-kr);
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
 }
@@ -41,20 +41,20 @@ html, body {
   padding-top: calc(14px + env(safe-area-inset-top));
 }
 .hud-wordmark {
-  font-family: var(--dfn-font-en);
+  font-family: var(--flm-font-en);
   font-weight: 700;
   font-size: 12px;
   letter-spacing: .28em;
-  color: var(--dfn-ink);
+  color: var(--flm-ink);
   white-space: nowrap;
 }
 .hud-right {
   margin-left: auto;
-  font-family: var(--dfn-font-en);
+  font-family: var(--flm-font-en);
   font-weight: 500;
   font-size: 10px;
   letter-spacing: .22em;
-  color: var(--dfn-muted);
+  color: var(--flm-muted);
   text-align: right;
   white-space: nowrap;
 }
@@ -67,13 +67,13 @@ html, body {
   background: rgba(255, 255, 255, .72);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
-  border: 1px solid var(--dfn-line);
+  border: 1px solid var(--flm-line);
   border-radius: 999px;
   padding: 8px 16px;
   font-size: 12.5px;
   font-weight: 500;
   letter-spacing: -0.01em;
-  color: var(--dfn-ink);
+  color: var(--flm-ink);
   white-space: nowrap;
   transition: opacity 1.2s ease;
   max-width: calc(100vw - 32px);
@@ -81,7 +81,7 @@ html, body {
   text-overflow: ellipsis;
 }
 .hud-hint.dim { opacity: 0; }
-.hud-hint b { color: var(--dfn-red); font-weight: 700; }
+.hud-hint b { color: var(--flm-red); font-weight: 700; }
 
 /* ── 모바일 이동 스틱 ─────────────────────── */
 #stick {
@@ -103,7 +103,7 @@ html, body {
   left: 50%; top: 50%;
   width: 46px; height: 46px;
   border-radius: 50%;
-  background: var(--dfn-ink);
+  background: var(--flm-ink);
   transform: translate(-50%, -50%);
   box-shadow: 0 4px 14px rgba(16, 16, 16, .3);
 }
@@ -112,23 +112,23 @@ html, body {
   position: absolute;
   left: 50%; top: -20px;
   transform: translateX(-50%);
-  font-family: var(--dfn-font-en);
+  font-family: var(--flm-font-en);
   font-size: 9px;
   letter-spacing: .3em;
-  color: var(--dfn-muted);
+  color: var(--flm-muted);
 }
 @media (pointer: coarse) { #stick { display: block; } }
 body.vr #stick, body.panel-open #stick { display: none; }
 
 /* ── VR 버튼 (VRButton.js 인라인 스타일 오버라이드) ── */
-#VRButton, .dfn-vr {
-  font-family: var(--dfn-font-en) !important;
+#VRButton, .flm-vr {
+  font-family: var(--flm-font-en) !important;
   font-weight: 600 !important;
   font-size: 11px !important;
   letter-spacing: .24em !important;
-  background: var(--dfn-ink) !important;
-  color: var(--dfn-bg) !important;
-  border: 1px solid var(--dfn-ink) !important;
+  background: var(--flm-ink) !important;
+  color: var(--flm-bg) !important;
+  border: 1px solid var(--flm-ink) !important;
   border-radius: 999px !important;
   padding: 12px 22px !important;
   width: auto !important;
@@ -146,13 +146,13 @@ body.vr #stick, body.panel-open #stick { display: none; }
   z-index: 19;
   margin: 0;
   font-size: 11px;
-  color: var(--dfn-muted);
+  color: var(--flm-muted);
   letter-spacing: -0.01em;
   pointer-events: none;
   white-space: nowrap;
 }
 body.vr .hud, body.vr #vrCaption { display: none; }
-body.panel-open .dfn-vr, body.panel-open #vrCaption { visibility: hidden; }
+body.panel-open .flm-vr, body.panel-open #vrCaption { visibility: hidden; }
 
 /* ── 뉴스 상세 패널 ───────────────────────── */
 #panel {
@@ -162,8 +162,8 @@ body.panel-open .dfn-vr, body.panel-open #vrCaption { visibility: hidden; }
   z-index: 40;
   width: min(720px, 100vw);
   transform: translate(-50%, 108%);
-  background: var(--dfn-paper);
-  border: 1px solid var(--dfn-line);
+  background: var(--flm-paper);
+  border: 1px solid var(--flm-line);
   border-bottom: none;
   border-radius: 18px 18px 0 0;
   padding: 20px 26px calc(20px + env(safe-area-inset-bottom));
@@ -176,7 +176,7 @@ body.panel-open .dfn-vr, body.panel-open #vrCaption { visibility: hidden; }
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 4px;
-  background: var(--dfn-red);
+  background: var(--flm-red);
   border-radius: 18px 18px 0 0;
 }
 
@@ -188,25 +188,25 @@ body.panel-open .dfn-vr, body.panel-open #vrCaption { visibility: hidden; }
   margin-bottom: 10px;
 }
 .panel-kicker {
-  font-family: var(--dfn-font-en);
+  font-family: var(--flm-font-en);
   font-weight: 600;
   font-size: 10px;
   letter-spacing: .3em;
-  color: var(--dfn-red);
+  color: var(--flm-red);
 }
 #panelClose {
   appearance: none;
-  border: 1px solid var(--dfn-line);
+  border: 1px solid var(--flm-line);
   background: transparent;
-  color: var(--dfn-ink);
-  font-family: var(--dfn-font-kr);
+  color: var(--flm-ink);
+  font-family: var(--flm-font-kr);
   font-size: 12px;
   font-weight: 600;
   border-radius: 999px;
   padding: 6px 14px;
   cursor: pointer;
 }
-#panelClose:hover { background: var(--dfn-ink); color: var(--dfn-bg); }
+#panelClose:hover { background: var(--flm-ink); color: var(--flm-bg); }
 
 #panelTitle {
   margin: 0 0 10px;
@@ -228,20 +228,20 @@ body.panel-open .dfn-vr, body.panel-open #vrCaption { visibility: hidden; }
   font-weight: 600;
   border-radius: 999px;
   padding: 4px 10px;
-  border: 1px solid var(--dfn-line);
-  color: var(--dfn-muted);
-  background: var(--dfn-bg);
+  border: 1px solid var(--flm-line);
+  color: var(--flm-muted);
+  background: var(--flm-bg);
 }
-.panel-meta .chip.ink { background: var(--dfn-ink); color: var(--dfn-bg); border-color: var(--dfn-ink); }
+.panel-meta .chip.ink { background: var(--flm-ink); color: var(--flm-bg); border-color: var(--flm-ink); }
 .panel-meta .chip.red {
   background: transparent;
-  color: var(--dfn-red);
-  border-color: var(--dfn-red);
-  font-family: var(--dfn-font-en);
+  color: var(--flm-red);
+  border-color: var(--flm-red);
+  font-family: var(--flm-font-en);
   letter-spacing: .14em;
   font-size: 10px;
 }
-.panel-meta .chip.yellow { background: var(--dfn-yellow); color: var(--dfn-ink); border-color: var(--dfn-yellow); }
+.panel-meta .chip.yellow { background: var(--flm-yellow); color: var(--flm-ink); border-color: var(--flm-yellow); }
 
 .panel-body {
   font-size: 14.5px;
@@ -265,20 +265,20 @@ body.panel-open .dfn-vr, body.panel-open #vrCaption { visibility: hidden; }
 #panelLink {
   font-weight: 700;
   font-size: 13px;
-  color: var(--dfn-bg);
-  background: var(--dfn-red);
+  color: var(--flm-bg);
+  background: var(--flm-red);
   text-decoration: none;
   border-radius: 999px;
   padding: 9px 18px;
 }
-#panelLink:hover { background: var(--dfn-ink); }
+#panelLink:hover { background: var(--flm-ink); }
 #panelLink[hidden] { display: none; }
 .panel-brand {
-  font-family: var(--dfn-font-en);
+  font-family: var(--flm-font-en);
   font-weight: 500;
   font-size: 9px;
   letter-spacing: .3em;
-  color: var(--dfn-muted);
+  color: var(--flm-muted);
 }
 
 /* ── 로딩 오버레이 ────────────────────────── */
@@ -291,22 +291,22 @@ body.panel-open .dfn-vr, body.panel-open #vrCaption { visibility: hidden; }
   align-items: center;
   justify-content: center;
   gap: 18px;
-  background: var(--dfn-bg);
+  background: var(--flm-bg);
   transition: opacity 2s ease;
 }
 #loader.done { opacity: 0; pointer-events: none; }
 .loader-word {
-  font-family: var(--dfn-font-en);
+  font-family: var(--flm-font-en);
   font-weight: 700;
   font-size: clamp(20px, 5vw, 30px);
   letter-spacing: .14em;
-  color: var(--dfn-ink);
+  color: var(--flm-ink);
 }
 #loader .spin {
   width: 34px; height: 34px;
   border-radius: 50%;
-  border: 3px solid var(--dfn-line);
-  border-top-color: var(--dfn-red);
+  border: 3px solid var(--flm-line);
+  border-top-color: var(--flm-red);
   animation: gallery-spin .9s linear infinite;
 }
 @keyframes gallery-spin { to { transform: rotate(360deg); } }
@@ -318,11 +318,11 @@ body.panel-open .dfn-vr, body.panel-open #vrCaption { visibility: hidden; }
 }
 .loader-en {
   margin: -10px 0 0;
-  font-family: var(--dfn-font-en);
+  font-family: var(--flm-font-en);
   font-weight: 500;
   font-size: 10px;
   letter-spacing: .34em;
-  color: var(--dfn-muted);
+  color: var(--flm-muted);
 }
 
 /* ── 폴백 화면 ────────────────────────────── */
@@ -335,16 +335,16 @@ body.panel-open .dfn-vr, body.panel-open #vrCaption { visibility: hidden; }
   align-items: center;
   justify-content: center;
   gap: 14px;
-  background: var(--dfn-bg);
+  background: var(--flm-bg);
   text-align: center;
   padding: 24px;
 }
 .fallback-word {
-  font-family: var(--dfn-font-en);
+  font-family: var(--flm-font-en);
   font-weight: 700;
   font-size: clamp(18px, 4.5vw, 26px);
   letter-spacing: .14em;
-  color: var(--dfn-ink);
+  color: var(--flm-ink);
   margin-bottom: 10px;
 }
 #fallback h1 {
@@ -357,7 +357,7 @@ body.panel-open .dfn-vr, body.panel-open #vrCaption { visibility: hidden; }
 #fallback p {
   margin: 0;
   font-size: 14px;
-  color: var(--dfn-muted);
+  color: var(--flm-muted);
   word-break: keep-all;
   line-height: 1.6;
 }
