@@ -102,6 +102,7 @@ async function init() {
   ]);
   newsItems = data.items || [];
   fetchedAt = data.fetched_at ? new Date(data.fetched_at) : new Date();
+  await preloadImages(newsItems);
 
   // ── 공간 구축
   buildLights();
@@ -145,6 +146,25 @@ async function loadNews() {
   const res = await fetch('./shared/data/news.json', { cache: 'no-store' });
   if (!res.ok) throw new Error('news.json HTTP ' + res.status);
   return res.json();
+}
+
+async function preloadImages(items) {
+  const promises = items.map(item => {
+    if (!item.photo) return Promise.resolve(null);
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        item.imgElement = img;
+        resolve(img);
+      };
+      img.onerror = () => {
+        console.error('Failed to load image:', item.photo);
+        resolve(null);
+      };
+      img.src = item.photo;
+    });
+  });
+  await Promise.all(promises);
 }
 
 
@@ -261,8 +281,8 @@ function buildTitleWall() {
   // 텍스트 워드마크
   x.fillStyle = '#101010';
   try { x.letterSpacing = '14px'; } catch {}
-  x.font = `800 92px ${FONT_EN}`;
-  x.fillText('2D ART GALLERY', 512, 190);
+  x.font = `800 80px ${FONT_EN}`;
+  x.fillText('FLAMINGALLERY', 512, 190);
 
   // 레드 룰
   x.fillStyle = '#DD382C';
@@ -392,48 +412,80 @@ function drawCardCanvas(item, idx) {
   x.textAlign = 'left';
   try { x.letterSpacing = '0px'; } catch {}
 
-  // 채널 배지 — 데이터의 channel 값을 그대로 표시(잉크/옐로 2색), 값이 없으면 ARCHIVE
-  const ch = item.channel || 'ARCHIVE';
-  x.font = `700 24px ${FONT_KR}`;
-  const bw = x.measureText(ch).width + 40;
-  const isMain = ch === '데패뉴';
-  x.fillStyle = isMain ? '#101010' : '#FFE14D';
-  rr(x, M, 112, bw, 44, 22);
-  x.fill();
-  x.fillStyle = isMain ? '#F5F2EB' : '#101010';
-  x.fillText(ch, M + 20, 143);
+  if (item.imgElement) {
+    // 1. 이미지 카드 레이아웃
+    // 이미지 그리기 (비율에 맞춰 536x400 영역에 드로잉)
+    x.drawImage(item.imgElement, M, 112, W - 2 * M, 380);
+    x.strokeStyle = 'rgba(16,16,16,.15)';
+    x.lineWidth = 1.5;
+    x.strokeRect(M, 112, W - 2 * M, 380);
 
-  // 타이틀 — 길면 폰트를 줄여 최대 4줄
-  x.fillStyle = '#101010';
-  let size = 54, lines;
-  for (;;) {
+    // 타이틀 (이미지 하단)
+    x.fillStyle = '#101010';
+    let size = 36;
     x.font = `800 ${size}px ${FONT_KR}`;
-    lines = wrapText(x, item.title || '(제목 없음)', W - 2 * M);
-    if (lines.length <= 4 || size <= 40) break;
-    size -= 7;
-  }
-  if (lines.length > 4) {
-    lines = lines.slice(0, 4);
-    lines[3] = lines[3].replace(/.$/, '…');
-  }
-  const lh = size * 1.24;
-  lines.forEach((ln, i) => x.fillText(ln, M, 240 + i * lh));
+    x.fillText(item.title || '(제목 없음)', M, 536);
 
-  // 디바이더
-  x.fillStyle = 'rgba(16,16,16,.85)';
-  x.fillRect(M, 506, 56, 4);
+    // 디바이더
+    x.fillStyle = 'rgba(16,16,16,.85)';
+    x.fillRect(M, 558, 48, 3.5);
 
-  // 발췌 3~4줄
-  const body = cleanExcerpt(item.excerpt).replace(/\s+/g, ' ').trim() ||
-    '본문 준비 중 — 지금 데스크에서 다듬는 중';
-  x.font = `500 26px ${FONT_KR}`;
-  x.fillStyle = 'rgba(48,45,38,.82)';
-  let elines = wrapText(x, body, W - 2 * M);
-  if (elines.length > 4) {
-    elines = elines.slice(0, 4);
-    elines[3] = elines[3].replace(/..$/, ' …');
+    // 발췌/설명
+    const body = cleanExcerpt(item.excerpt).replace(/\s+/g, ' ').trim() || '';
+    x.font = `500 22px ${FONT_KR}`;
+    x.fillStyle = 'rgba(48,45,38,.85)';
+    let elines = wrapText(x, body, W - 2 * M);
+    if (elines.length > 4) {
+      elines = elines.slice(0, 4);
+      elines[3] = elines[3].replace(/..$/, ' …');
+    }
+    elines.forEach((ln, i) => x.fillText(ln, M, 600 + i * 32));
+
+  } else {
+    // 2. 기존 타이포 카드 레이아웃
+    // 채널 배지 — 데이터의 channel 값을 그대로 표시(잉크/옐로 2색), 값이 없으면 ARCHIVE
+    const ch = item.channel || 'ARCHIVE';
+    x.font = `700 24px ${FONT_KR}`;
+    const bw = x.measureText(ch).width + 40;
+    const isMain = ch === '데패뉴';
+    x.fillStyle = isMain ? '#101010' : '#FFE14D';
+    rr(x, M, 112, bw, 44, 22);
+    x.fill();
+    x.fillStyle = isMain ? '#F5F2EB' : '#101010';
+    x.fillText(ch, M + 20, 143);
+
+    // 타이틀 — 길면 폰트를 줄여 최대 4줄
+    x.fillStyle = '#101010';
+    let size = 54, lines;
+    for (;;) {
+      x.font = `800 ${size}px ${FONT_KR}`;
+      lines = wrapText(x, item.title || '(제목 없음)', W - 2 * M);
+      if (lines.length <= 4 || size <= 40) break;
+      size -= 7;
+    }
+    if (lines.length > 4) {
+      lines = lines.slice(0, 4);
+      lines[3] = lines[3].replace(/.$/, '…');
+    }
+    const lh = size * 1.24;
+    lines.forEach((ln, i) => x.fillText(ln, M, 240 + i * lh));
+
+    // 디바이더
+    x.fillStyle = 'rgba(16,16,16,.85)';
+    x.fillRect(M, 506, 56, 4);
+
+    // 발췌 3~4줄
+    const body = cleanExcerpt(item.excerpt).replace(/\s+/g, ' ').trim() ||
+      '본문 준비 중 — 지금 데스크에서 다듬는 중';
+    x.font = `500 26px ${FONT_KR}`;
+    x.fillStyle = 'rgba(48,45,38,.82)';
+    let elines = wrapText(x, body, W - 2 * M);
+    if (elines.length > 4) {
+      elines = elines.slice(0, 4);
+      elines[3] = elines[3].replace(/..$/, ' …');
+    }
+    elines.forEach((ln, i) => x.fillText(ln, M, 552 + i * 41));
   }
-  elines.forEach((ln, i) => x.fillText(ln, M, 552 + i * 41));
 
   // 하단 — 워드마크 / 검증 스탬프
   x.fillStyle = '#DD382C';
@@ -441,7 +493,7 @@ function drawCardCanvas(item, idx) {
   try { x.letterSpacing = '3px'; } catch {}
   x.font = `500 17px ${FONT_EN}`;
   x.fillStyle = COLOR.muted;
-  x.fillText('2D ART GALLERY', M + 20, 743);
+  x.fillText('FLAMINGALLERY', M + 20, 743);
   try { x.letterSpacing = '0px'; } catch {}
 
   if (item.verified) {
