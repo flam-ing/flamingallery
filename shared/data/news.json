@@ -1,58 +1,103 @@
 {
-  "fetched_at": "2026-07-08T11:00:00+09:00",
+  "fetched_at": "2026-07-08T12:00:00+09:00",
   "items": [
     {
       "title": "모나 플라밍 (Mona Flamingo)",
-      "date": "2026-07-08",
-      "channel": "MASTERPIECE",
-      "source": "https://flam-ing.org",
-      "excerpt": "레오나르도 다 빈치의 모나리자를 오마주하여, 신비로운 미소를 지은 핑크 홍학을 묘사한 플라밍 갤러리의 대표 걸작.",
+      "date": "Renaissance",
+      "channel": "르네상스 미술",
+      "source": "",
+      "excerpt": "레오나르도 다 빈치의 모나리자를 오마주하여, 신비로운 미소를 지은 핑크 홍학을 묘사한 대표 걸작.",
       "photo": "./photos/mona_flamingo.jpg",
       "verified": true
     },
     {
       "title": "절규하는 플라밍 (The Flamingo Scream)",
-      "date": "2026-07-08",
-      "channel": "MASTERPIECE",
-      "source": "https://flam-ing.org",
+      "date": "Expressionism",
+      "channel": "표현주의 미술",
+      "source": "",
       "excerpt": "에드바르트 뭉크의 절규 속 인물을 공포에 질린 홍학으로 재해석하여, 극도의 실존적 불안을 강렬한 색채로 표현한 작품.",
       "photo": "./photos/flamingo_scream.jpg",
       "verified": true
     },
     {
       "title": "진주 귀걸이를 한 홍학 (Flamingo with a Pearl Earring)",
-      "date": "2026-07-08",
-      "channel": "MASTERPIECE",
-      "source": "https://flam-ing.org",
+      "date": "Baroque",
+      "channel": "바로크 미술",
+      "source": "",
       "excerpt": "요하네스 페르메이르의 걸작을 재해석하여, 파란 터번과 큰 진주 귀걸이를 착용한 홍학의 매혹적인 옆모습을 담은 명화.",
       "photo": "./photos/flamingo_pearl.jpg",
       "verified": true
     },
     {
       "title": "플라밍의 아들 (The Son of Flamingo)",
-      "date": "2026-07-08",
-      "channel": "MASTERPIECE",
-      "source": "https://flam-ing.org",
+      "date": "Surrealism",
+      "channel": "초현실주의 미술",
+      "source": "",
       "excerpt": "르네 마그리트의 초현실주의 명작을 오마주하여, 중절모를 쓴 신사의 얼굴 앞에 떠 있는 분홍색 홍학을 그린 초현실적 걸작.",
       "photo": "./photos/son_of_flamingo.jpg",
       "verified": true
     },
     {
       "title": "홍학의 별이 빛나는 밤 (Starry Night with Flamingo)",
-      "date": "2026-07-08",
-      "channel": "MASTERPIECE",
-      "source": "https://flam-ing.org",
+      "date": "Post-Impressionism",
+      "channel": "후기 인상주의",
+      "source": "",
       "excerpt": "빈센트 반 고흐의 별이 빛나는 밤하늘 아래, 전경에 우뚝 선 홍학의 검은 실루엣을 배치하여 생동감을 더한 포스트 인상주의 화풍.",
       "photo": "./photos/starry_flamingo.jpg",
       "verified": true
     },
     {
       "title": "알프스를 넘는 플라밍 (Napoleon Crossing the Alps)",
-      "date": "2026-07-08",
-      "channel": "MASTERPIECE",
-      "source": "https://flam-ing.org",
+      "date": "Neoclassicism",
+      "channel": "신고전주의 미술",
+      "source": "",
       "excerpt": "자크 루이 다비드의 나폴레옹 영웅화를 재해석하여, 붉은 망토를 휘날리며 백마를 탄 용맹한 홍학 장군을 묘사한 역사적 걸작.",
       "photo": "./photos/napoleon_flamingo.jpg",
+      "verified": true
+    },
+    {
+      "title": "플라밍의 키스 (The Flamingo Kiss)",
+      "date": "Symbolism",
+      "channel": "상징주의 미술",
+      "source": "",
+      "excerpt": "구스타프 클림트의 키스를 오마주하여, 황금빛 예복을 입고 입맞춤을 나누는 아름다운 홍학 연인을 그린 작품.",
+      "photo": "./photos/flamingo_kiss.jpg",
+      "verified": true
+    },
+    {
+      "title": "수련과 홍학 (Water Lilies with Flamingo)",
+      "date": "Impressionism",
+      "channel": "인상주의 미술",
+      "source": "",
+      "excerpt": "클로드 모네의 수련 정원을 오마주하여, 잔잔한 연못의 연꽃 사이에 조용히 서 있는 홍학의 모습을 그린 인상주의 풍경화.",
+      "photo": "./photos/monet_flamingo.jpg",
+      "verified": true
+    },
+    {
+      "title": "귀에 붕대를 감은 홍학의 자화상 (Self-Portrait of Flamingo)",
+      "date": "Post-Impressionism",
+      "channel": "후기 인상주의",
+      "source": "",
+      "excerpt": "빈센트 반 고흐의 자화상을 재해석하여, 상처투성이 귀에 붕대를 감고 굳건한 눈빛을 지닌 홍학의 영혼을 담아낸 자화상.",
+      "photo": "./photos/self_flamingo.jpg",
+      "verified": true
+    },
+    {
+      "title": "기억의 지속과 플라밍 (The Persistence of Flamingo)",
+      "date": "Surrealism",
+      "channel": "초현실주의 미술",
+      "source": "",
+      "excerpt": "살바도르 달리의 기억의 지속을 오마주하여, 흘러내리는 시계들이 가득한 사막 풍경 속 멀리 서 있는 홍학을 그린 초현실주의 작품.",
+      "photo": "./photos/persistence_flamingo.jpg",
+      "verified": true
+    },
+    {
+      "title": "팝아트 플라밍 (Pop Art Flamingo)",
+      "date": "Pop Art",
+      "channel": "팝아트 미술",
+      "source": "",
+      "excerpt": "앤디 워홀의 마릴린 먼로 실크스크린을 오마주하여, 노란 가발을 쓴 매혹적인 핑크 홍학의 얼굴을 강렬한 색감의 판화 기법으로 재탄생시킨 팝아트 작품.",
+      "photo": "./photos/warhol_flamingo.jpg",
       "verified": true
     }
   ]

@@ -22,7 +22,7 @@ const COLOR = {
 
 const ROOM = { w: 24, d: 36, h: 5 };      // 갤러리 홀 크기(m)
 const EYE = 1.6;                           // 눈높이
-const CARD = { w: 1.7, h: 2.125, y: 1.85 }; // 액자 카드 크기·중심높이
+const CARD = { w: 2.2, h: 1.65, y: 1.85 }; // 액자 카드 크기·중심높이
 const BOUND = { x: 10.8, z: 16.8 };        // 이동 가능 범위
 const SCULPT_R = 2.0;                      // 조형물 충돌 반경
 
@@ -101,6 +101,14 @@ async function init() {
     delay(700), // 스피너 최소 노출
   ]);
   newsItems = data.items || [];
+  const targetCount = 24;
+  if (newsItems.length > 0 && newsItems.length < targetCount) {
+    const originalItems = [...newsItems];
+    while (newsItems.length < targetCount) {
+      newsItems = newsItems.concat(originalItems.map(item => ({ ...item })));
+    }
+    newsItems = newsItems.slice(0, targetCount);
+  }
   fetchedAt = data.fetched_at ? new Date(data.fetched_at) : new Date();
   await preloadImages(newsItems);
 
@@ -388,124 +396,27 @@ function buildFrames() {
 /* ── 액자 카드 텍스처 (640×800 캔버스 타이포 카드) ─────────── */
 
 function drawCardCanvas(item, idx) {
-  const W = 640, H = 800, M = 52;
+  const W = 800, H = 600;
   const c = document.createElement('canvas');
   c.width = W; c.height = H;
   const x = c.getContext('2d');
 
-  // 종이 바탕 + 가장자리 헤어라인
-  x.fillStyle = COLOR.paper;
-  x.fillRect(0, 0, W, H);
-  x.strokeStyle = 'rgba(16,16,16,.08)';
-  x.lineWidth = 2;
-  x.strokeRect(13, 13, W - 26, H - 26);
-
-  // 헤더 — 번호(레드) / 날짜(우측)
-  try { x.letterSpacing = '4px'; } catch {}
-  x.font = `600 26px ${FONT_EN}`;
-  x.fillStyle = '#DD382C';
-  x.textAlign = 'left';
-  x.fillText(`NO.${String(idx + 1).padStart(2, '0')}`, M, 86);
-  x.fillStyle = COLOR.muted;
-  x.textAlign = 'right';
-  x.fillText(String(item.date || '').slice(5).replace('-', '.'), W - M, 86);
-  x.textAlign = 'left';
-  try { x.letterSpacing = '0px'; } catch {}
-
   if (item.imgElement) {
-    // 1. 이미지 카드 레이아웃
-    // 이미지 그리기 (비율에 맞춰 536x400 영역에 드로잉)
-    x.drawImage(item.imgElement, M, 112, W - 2 * M, 380);
-    x.strokeStyle = 'rgba(16,16,16,.15)';
-    x.lineWidth = 1.5;
-    x.strokeRect(M, 112, W - 2 * M, 380);
-
-    // 타이틀 (이미지 하단)
-    x.fillStyle = '#101010';
-    let size = 36;
-    x.font = `800 ${size}px ${FONT_KR}`;
-    x.fillText(item.title || '(제목 없음)', M, 536);
-
-    // 디바이더
-    x.fillStyle = 'rgba(16,16,16,.85)';
-    x.fillRect(M, 558, 48, 3.5);
-
-    // 발췌/설명
-    const body = cleanExcerpt(item.excerpt).replace(/\s+/g, ' ').trim() || '';
-    x.font = `500 22px ${FONT_KR}`;
-    x.fillStyle = 'rgba(48,45,38,.85)';
-    let elines = wrapText(x, body, W - 2 * M);
-    if (elines.length > 4) {
-      elines = elines.slice(0, 4);
-      elines[3] = elines[3].replace(/..$/, ' …');
-    }
-    elines.forEach((ln, i) => x.fillText(ln, M, 600 + i * 32));
-
+    // 이미지 가로형 가득 채워 그리기 (팩트체크 등 불필요한 메타데이터 전면 제거)
+    x.drawImage(item.imgElement, 0, 0, W, H);
   } else {
-    // 2. 기존 타이포 카드 레이아웃
-    // 채널 배지 — 데이터의 channel 값을 그대로 표시(잉크/옐로 2색), 값이 없으면 ARCHIVE
-    const ch = item.channel || 'ARCHIVE';
-    x.font = `700 24px ${FONT_KR}`;
-    const bw = x.measureText(ch).width + 40;
-    const isMain = ch === '데패뉴';
-    x.fillStyle = isMain ? '#101010' : '#FFE14D';
-    rr(x, M, 112, bw, 44, 22);
-    x.fill();
-    x.fillStyle = isMain ? '#F5F2EB' : '#101010';
-    x.fillText(ch, M + 20, 143);
+    // 이미지가 없는 경우 폴백 레이아웃
+    x.fillStyle = COLOR.paper;
+    x.fillRect(0, 0, W, H);
+    x.strokeStyle = 'rgba(16,16,16,.08)';
+    x.lineWidth = 2;
+    x.strokeRect(13, 13, W - 26, H - 26);
 
-    // 타이틀 — 길면 폰트를 줄여 최대 4줄
     x.fillStyle = '#101010';
-    let size = 54, lines;
-    for (;;) {
-      x.font = `800 ${size}px ${FONT_KR}`;
-      lines = wrapText(x, item.title || '(제목 없음)', W - 2 * M);
-      if (lines.length <= 4 || size <= 40) break;
-      size -= 7;
-    }
-    if (lines.length > 4) {
-      lines = lines.slice(0, 4);
-      lines[3] = lines[3].replace(/.$/, '…');
-    }
-    const lh = size * 1.24;
-    lines.forEach((ln, i) => x.fillText(ln, M, 240 + i * lh));
-
-    // 디바이더
-    x.fillStyle = 'rgba(16,16,16,.85)';
-    x.fillRect(M, 506, 56, 4);
-
-    // 발췌 3~4줄
-    const body = cleanExcerpt(item.excerpt).replace(/\s+/g, ' ').trim() ||
-      '본문 준비 중 — 지금 데스크에서 다듬는 중';
-    x.font = `500 26px ${FONT_KR}`;
-    x.fillStyle = 'rgba(48,45,38,.82)';
-    let elines = wrapText(x, body, W - 2 * M);
-    if (elines.length > 4) {
-      elines = elines.slice(0, 4);
-      elines[3] = elines[3].replace(/..$/, ' …');
-    }
-    elines.forEach((ln, i) => x.fillText(ln, M, 552 + i * 41));
-  }
-
-  // 하단 — 워드마크 / 검증 스탬프
-  x.fillStyle = '#DD382C';
-  x.fillRect(M, 734, 9, 9);
-  try { x.letterSpacing = '3px'; } catch {}
-  x.font = `500 17px ${FONT_EN}`;
-  x.fillStyle = COLOR.muted;
-  x.fillText('FLAMINGALLERY', M + 20, 743);
-  try { x.letterSpacing = '0px'; } catch {}
-
-  if (item.verified) {
-    drawStamp(x, W - M - 118, 726);
-  } else {
-    x.font = `700 21px ${FONT_KR}`;
-    const t = '확인 중';
-    const tw = x.measureText(t).width;
-    x.fillStyle = '#FFE14D';
-    x.fillRect(W - M - tw - 24, 706, tw + 24, 38);
-    x.fillStyle = '#101010';
-    x.fillText(t, W - M - tw - 12, 733);
+    x.font = `700 40px ${FONT_KR}`;
+    x.textAlign = 'center';
+    x.textBaseline = 'middle';
+    x.fillText(item.title || '(제목 없음)', W / 2, H / 2);
   }
 
   return c;
@@ -818,35 +729,21 @@ function startTween(toPos, toQuat, onDone, dur = 1.0) {
 
 function openPanel(f) {
   const { item, index } = f;
-  document.getElementById('panelKicker').textContent =
-    `TODAY'S ISSUE — NO.${String(index + 1).padStart(2, '0')}`;
+  // Show only NO.XX instead of TODAY'S ISSUE
+  document.getElementById('panelKicker').textContent = `EXHIBIT NO.${String((index % 11) + 1).padStart(2, '0')}`;
   document.getElementById('panelTitle').textContent = item.title || '(제목 없음)';
 
+  // Hide the meta section (date, channel, verified badges)
   const meta = document.getElementById('panelMeta');
   meta.innerHTML = '';
-  const chip = (txt, cls) => {
-    const s = document.createElement('span');
-    s.className = 'chip' + (cls ? ' ' + cls : '');
-    s.textContent = txt;
-    meta.appendChild(s);
-  };
-  chip(item.date || '');
-  chip(item.channel || 'ARCHIVE', item.channel === '데뷰웰' ? 'yellow' : 'ink');
-  if (item.verified) chip('FACT-CHECKED ✓', 'red');
-  else chip('확인 중', 'yellow');
+  meta.style.display = 'none';
 
   const body = cleanExcerpt(item.excerpt);
-  document.getElementById('panelBody').textContent =
-    body || '본문 준비 중 — 지금 데스크에서 다듬는 중';
+  document.getElementById('panelBody').textContent = body || '';
 
+  // Hide the read-more/source link completely
   const link = document.getElementById('panelLink');
-  const src = String(item.source || '').trim();
-  if (/^https?:\/\//.test(src)) {
-    link.href = src;
-    link.hidden = false;
-  } else {
-    link.hidden = true;
-  }
+  link.style.display = 'none';
 
   document.getElementById('panel').classList.add('open');
   document.getElementById('panel').setAttribute('aria-hidden', 'false');
