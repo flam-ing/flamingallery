@@ -641,7 +641,7 @@ function exitFocus(instant = false) {
   state.focused = null;
   state.returnPose = null;
   if (!rp) return;
-  if (instant) {
+  if (instant === true) {
     rig.position.copy(rp.pos);
     camera.quaternion.copy(rp.quat);
     syncLookFromCamera();
