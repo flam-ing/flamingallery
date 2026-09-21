@@ -1,5 +1,7 @@
 # 2D Art Gallery
 
+[갤러리 바로가기](https://flam-ing.github.io/flamingallery/)
+
 오늘의 이슈가 걸리는 WebXR 가상 갤러리.
 
 three.js r160(로컬 벤더드, CDN 없음) + 프레임워크 없는 순수 HTML/CSS/JS. `shared/data/news.json`이 바뀌면 전시도 매일 바뀝니다.
